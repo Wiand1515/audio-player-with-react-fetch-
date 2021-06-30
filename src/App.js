@@ -1,14 +1,14 @@
-import { faFortAwesome } from '@fortawesome/free-brands-svg-icons';
 import React from 'react';
 import MusicPlayer from "./components/MusicPlayer";
+import MusicPlayer2 from './components/MusicPlayer2';
 
 
 
 function App() {
   return (
-    <>
-    <MusicPlayer/> 
-    </>
+    <div> 
+    <MusicPlayer2/>
+    </div>
 
   );
 }

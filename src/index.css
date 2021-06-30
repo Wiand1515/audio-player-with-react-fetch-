@@ -1,4 +1,12 @@
-*{
+
+.container h1 {
+  color: white;
+}
+.container li {
+  cursor: pointer;
+}
+
+/* *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -128,7 +136,7 @@
 
 
 /* custom scrollbar */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 20px;
 }
 
@@ -145,4 +153,4 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: ;
-}
+} */ /* */ 
