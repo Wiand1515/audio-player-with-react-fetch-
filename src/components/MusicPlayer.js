@@ -1,37 +1,35 @@
-import React, { useState, useRef, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Songs from "./Songs";
-import "../index.css";
+import { FaBackward, FaFastBackward, FaFastForward, FaPause, FaPlay } from 'react-icons/fa';
 
-const MusicPlayer = () => {
 
+function MusicPlayer() {
   const [songs, setSongs] = useState([]);
   const [id, setId] = useState(null);
   const [isPaused, setIsPaused] = useState(true);
   const [currentSong, setCurrentSong] = useState(null);
+ 
 
   useEffect(() => {
-    getSongs();
-  }, [])
-  
-  const getSongs = async () => {
+    getSongs('https://assets.breatheco.de/apis/sound/songs');
+  }, []);
+
+  const getSongs = async (url) => {
     try {
-      const response = await fetch('https://assets.breatheco.de/apis/sound/songs');      
-      // console.log(response);
-      if(response.ok) {
+      const response = await fetch(url);
+     
+      if (response.ok) {
         const data = await response.json();
         setSongs(data);
-        console.log(data);
+        console.log(data)
+        
+     
       }
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err);
     }
-  }
-  
-  
-  
-  
-  
-  
+  };
+
   let refAudio = useRef();
 
   const pause = () => {
@@ -41,7 +39,7 @@ const MusicPlayer = () => {
 
   const play = () => {
     refAudio.current.play();
-    setIsPaused(true);
+    setIsPaused(false);
   };
 
   const rewind = () => {
@@ -60,7 +58,6 @@ const MusicPlayer = () => {
 
   const forward = () => {
     if (id < songs.length - 1) {
-      console.log(id + 1);
       setCurrentSong(
         `https://assets.breatheco.de/apis/sound/${songs[id + 1].url}`
       );
@@ -76,54 +73,61 @@ const MusicPlayer = () => {
   return (
     <>
       <audio src={currentSong} ref={refAudio} autoPlay></audio>
-      <div className="container">
-        <div className="content">
-          <div className="head">
-            <ul className="list">
+
+      <div className="container my-5 bg-dark py-5 rounded border border-warning border-4">
+        <h1 className="text-center">Music Player Fetch</h1>
+        {
+
+        }
+        <div className="row">
+          <div className="col-md-6 offset-md-3" style={{height: '300px', overflowY: 'scroll'}}>
+            <ul className="list-group border border-warning border-5">
               {songs.map((value, i) => {
-                return (
-                  <li
-                    className="item"
-                    key={value.id}
-                    onClick={(e) => {
-                      console.log(isPaused);
-                      setCurrentSong(
-                        `https://assets.breatheco.de/apis/sound/${value.url}`
-                      );
-                      setId(i);
-                      setIsPaused(false);
-                    }}
-                  >
-                    {value.name}
-                  </li>
+                  return(
+                <li
+                  className={"list-group-item list-group-item-action"}
+                  key={value.id+value.name}
+                  onClick={(e) => {
+                    setCurrentSong(
+                      `https://assets.breatheco.de/apis/sound/${value.url}`
+                    );
+                    setId(i);
+                    console.log(value)
+                    
+                    setIsPaused(false);
+                    console.log(i)
+                  }}
+                >
+                  {value.name}
+                </li>
                 );
               })}
             </ul>
           </div>
-          <div className="body">
-            <button onClick={rewind} className="btn-rf">
-              {" "}
-              R{" "}
-            </button>
-            {isPaused ? (
-              <button onClick={play} className="btn">
-                {" "}
-                |>{" "}
-              </button>
-            ) : (
-              <button onClick={pause} className="btn">
-                ||
-              </button>
-            )}
+          <div className="row">
+            <div className="col-md-6 offset-md-3 d-flex justify-content-center py-3">
+              <div className="button-group d-flex ">
+                <button className="btn btn-primary mx-1" onClick={rewind}>
+                  <FaFastBackward/>
+                </button>
 
-            <button onClick={forward} className="btn-rf">
-              {" "}
-              |>|>{" "}
-            </button>
+                {isPaused ? (
+                  <button className="btn btn-danger mx-1 btn-lg " onClick={play}>
+                    <FaPlay/>
+                  </button>
+                ) : (
+                  <button className="btn btn-danger mx-1 btn-lg " onClick={pause}>
+                    <FaPause/>
+                  </button>
+                )}
+                <button className="btn btn-primary mx-1" onClick={forward}><FaFastForward/></button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </>
   );
-};
+}
+
 export default MusicPlayer;
